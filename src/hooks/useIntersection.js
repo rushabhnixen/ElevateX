@@ -1,24 +1,19 @@
-import { useEffect, useRef, useState, useMemo } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-export function useIntersection(options = {}) {
+export function useIntersection({ threshold = 0.6, root = null, rootMargin = '0px' } = {}) {
   const ref = useRef(null);
   const [isIntersecting, setIsIntersecting] = useState(false);
-
-  const stableOptions = useMemo(() => ({ threshold: 0.6, ...options }), [
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    JSON.stringify(options),
-  ]);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const observer = new IntersectionObserver(
       ([entry]) => setIsIntersecting(entry.isIntersecting),
-      stableOptions
+      { threshold, root, rootMargin }
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [stableOptions]);
+  }, [threshold, root, rootMargin]);
 
   return { ref, isIntersecting };
 }

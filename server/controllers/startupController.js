@@ -16,7 +16,7 @@ export async function getStartups(req, res) {
 export async function getStartup(req, res) {
   try {
     const startup = await Startup.findById(req.params.id);
-    if (!startup) return res.status(404).json({ error: 'Not found' });
+    if (!startup) return res.status(404).json({ error: 'Startup not found' });
     res.json(startup);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -36,7 +36,7 @@ export async function createStartup(req, res) {
 export async function updateStartup(req, res) {
   try {
     const startup = await Startup.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!startup) return res.status(404).json({ error: 'Not found' });
+    if (!startup) return res.status(404).json({ error: 'Startup not found' });
     res.json(startup);
   } catch (err) {
     res.status(400).json({ error: err.message });
