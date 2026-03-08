@@ -111,17 +111,21 @@ export default function VideoCard({ startup, isActive }) {
       </div>
 
       {showMuteHint && (
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-20">
+        <div
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-20"
+        >
           <motion.div
             initial={{ opacity: 1, scale: 1 }}
             animate={{ opacity: 0, scale: 1.5 }}
             transition={{ duration: 0.8 }}
             className="bg-black/50 rounded-full p-4"
-            role="status"
-            aria-label={muted ? 'Video muted' : 'Video unmuted'}
           >
             <span className="text-white text-2xl" aria-hidden="true">{muted ? '🔇' : '🔊'}</span>
           </motion.div>
+          <span className="sr-only">{muted ? 'Video muted' : 'Video unmuted'}</span>
         </div>
       )}
     </div>

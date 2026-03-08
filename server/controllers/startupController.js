@@ -55,6 +55,7 @@ export async function deleteStartup(req, res) {
 export async function likeStartup(req, res) {
   try {
     const startup = await Startup.findByIdAndUpdate(req.params.id, { $inc: { likes: 1 } }, { new: true });
+    if (!startup) return res.status(404).json({ error: 'Startup not found' });
     res.json({ likes: startup.likes });
   } catch (err) {
     res.status(500).json({ error: err.message });

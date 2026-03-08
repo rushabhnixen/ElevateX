@@ -28,10 +28,30 @@ app.get('/health', (req, res) => res.json({ status: 'ok' }));
 io.on('connection', (socket) => {
   console.log('Client connected:', socket.id);
 
-  socket.on('join_room', (roomId) => socket.join(roomId));
+  socket.on('join_room', (roomId) => {
+    socket.join(roomId);
+    socket.to(roomId).emit('user_joined', { socketId: socket.id });
+  });
 
   socket.on('send_message', (data) => {
-    io.to(data.roomId).emit('receive_message', data);
+    io.to(data.roomId).emit('receive_message', { ...data, timestamp: new Date() });
+  });
+
+  socket.on('typing', (data) => {
+    // Broadcast typing indicator to room (excluding sender)
+    socket.to(data.roomId).emit('typing', { userId: data.userId, isTyping: data.isTyping });
+  });
+
+  socket.on('notification', (data) => {
+    // Forward notification to a specific user's room
+    if (data.targetUserId) {
+      io.to(`user:${data.targetUserId}`).emit('notification', data);
+    }
+  });
+
+  socket.on('join_user_room', (userId) => {
+    // Join a personal notification room
+    socket.join(`user:${userId}`);
   });
 
   socket.on('disconnect', () => console.log('Client disconnected:', socket.id));
