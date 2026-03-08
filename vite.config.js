@@ -29,7 +29,7 @@ export default defineConfig({
           {
             urlPattern: /^https:\/\/api\./i,
             handler: 'NetworkFirst',
-            options: { cacheName: 'api-cache', networkTimeoutSeconds: 10 }
+            options: { cacheName: 'api-cache', networkTimeoutSeconds: 5 }
           },
           {
             urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/,

@@ -117,8 +117,10 @@ export default function VideoCard({ startup, isActive }) {
             animate={{ opacity: 0, scale: 1.5 }}
             transition={{ duration: 0.8 }}
             className="bg-black/50 rounded-full p-4"
+            role="status"
+            aria-label={muted ? 'Video muted' : 'Video unmuted'}
           >
-            <span className="text-white text-2xl">{muted ? '🔇' : '🔊'}</span>
+            <span className="text-white text-2xl" aria-hidden="true">{muted ? '🔇' : '🔊'}</span>
           </motion.div>
         </div>
       )}
