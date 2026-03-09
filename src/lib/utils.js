@@ -1,5 +1,8 @@
-export function cn(...classes) {
-  return classes.filter(Boolean).join(' ');
+import { clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+export function cn(...inputs) {
+  return twMerge(clsx(inputs));
 }
 
 export function formatTime(date) {
@@ -16,5 +19,6 @@ export function formatTime(date) {
 export function formatNumber(n) {
   if (n >= 1000000) return `${(n / 1000000).toFixed(1)}M`;
   if (n >= 1000) return `${(n / 1000).toFixed(1)}K`;
-  return n.toString();
+  return n?.toString() ?? '0';
 }
+

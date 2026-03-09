@@ -9,11 +9,16 @@ const icons = {
   comment: { icon: MessageCircle, color: 'text-green-400', bg: 'bg-green-500/20' },
 };
 
-export default function NotificationItem({ notification }) {
+export default function NotificationItem({ notification, onRead }) {
   const { icon: Icon, color, bg } = icons[notification.type] || icons.view;
 
   return (
-    <div className={`flex items-start gap-3 p-3 rounded-xl transition-colors ${notification.read ? '' : 'bg-surface'}`}>
+    <button
+      onClick={() => !notification.read && onRead?.(notification.id)}
+      className={`w-full flex items-start gap-3 p-3 rounded-xl transition-colors text-left active:bg-border ${
+        notification.read ? '' : 'bg-surface'
+      }`}
+    >
       <div className={`w-10 h-10 rounded-full ${bg} flex items-center justify-center flex-shrink-0`}>
         <Icon size={18} className={color} />
       </div>
@@ -24,6 +29,7 @@ export default function NotificationItem({ notification }) {
         <p className="text-muted text-xs mt-0.5">{formatTime(notification.time)}</p>
       </div>
       {!notification.read && <div className="w-2 h-2 bg-accent rounded-full flex-shrink-0 mt-1.5" />}
-    </div>
+    </button>
   );
 }
+

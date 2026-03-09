@@ -2,9 +2,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Briefcase, Rocket } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { usersAPI } from '../lib/api';
 
 export default function RoleSelect() {
-  const { setUserRole } = useAuth();
+  const { setUserRole, user } = useAuth();
 
   const roles = [
     {
@@ -25,6 +26,14 @@ export default function RoleSelect() {
     },
   ];
 
+  const handleRoleSelect = (id) => {
+    setUserRole(id);
+    // Persist role to DB if user is authenticated
+    if (user?._id) {
+      usersAPI.update(user._id, { role: id }).catch(() => {});
+    }
+  };
+
   return (
     <div className="min-h-dvh bg-background flex flex-col items-center justify-center px-6 gap-8 max-w-mobile mx-auto">
       <div className="text-center">
@@ -39,7 +48,7 @@ export default function RoleSelect() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
-            onClick={() => setUserRole(id)}
+            onClick={() => handleRoleSelect(id)}
             className={`w-full p-6 rounded-2xl bg-gradient-to-br ${gradient} border ${border} flex items-center gap-5 text-left active:scale-95 transition-all`}
           >
             <div className="w-14 h-14 rounded-xl bg-surface flex items-center justify-center flex-shrink-0">
@@ -55,3 +64,4 @@ export default function RoleSelect() {
     </div>
   );
 }
+
