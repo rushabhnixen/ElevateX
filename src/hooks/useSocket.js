@@ -1,15 +1,15 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
-export function useSocket() {
+export default function useSocket(url) {
   const socketRef = useRef(null);
 
-  const emit = (event, data) => {
-    if (socketRef.current) socketRef.current.emit(event, data);
-  };
+  useEffect(() => {
+    // Connect when URL is provided and backend is available
+    // import('socket.io-client').then(({ io }) => {
+    //   socketRef.current = io(url);
+    //   return () => socketRef.current?.disconnect();
+    // });
+  }, [url]);
 
-  const on = (event, cb) => {
-    if (socketRef.current) socketRef.current.on(event, cb);
-  };
-
-  return { socket: socketRef.current, emit, on };
+  return socketRef.current;
 }
